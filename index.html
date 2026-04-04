@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EasyCrewAI — Tu equipo de agentes IA para Claude Code</title>
+<meta name="description" content="22 equipos prearmados. 101 agentes. Un solo archivo HTML. Pegás el prompt en Claude Code y tu equipo está listo.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?Plus+Jakarta+Sans:wght@700;800&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://app.lemonsqueezy.com/js/lemon.js" defer></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0A0A0A;
+    --surface: #111111;
+    --border: #1A1A1A;
+    --border2: #333333;
+    --base: #E0E0E0;
+    --mid: #C0C0C0;
+    --dim: #888888;
+    --dim2: #555555;
+    --accent: #3ECF8E;
+    --accent-dim: rgba(62,207,142,0.12);
+    --accent-border: rgba(62,207,142,0.3);
+    --cyan: #06B6D4;
+    --purple: #A855F7;
+    --pink: #FF6EB4;
+    --amber: #E8A04A;
+    --red: #EF4444;
+    --violet: #C084FC;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--base);
+    font-family: 'Geist', 'Inter', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── ANIMACIONES ── */
+
+  /* Fade-in al scroll */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity .65s ease, transform .65s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-delay-1 { transition-delay: .1s; }
+  .reveal-delay-2 { transition-delay: .2s; }
+  .reveal-delay-3 { transition-delay: .3s; }
+  .reveal-delay-4 { transition-delay: .4s; }
+
+  /* Hero glow orbit */
+  @keyframes orbit {
+    0%   { transform: translate(-50%, -50%) rotate(0deg) translateX(220px) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg) translateX(220px) rotate(-360deg); }
+  }
+  @keyframes orbit2 {
+    0%   { transform: translate(-50%, -50%) rotate(180deg) translateX(160px) rotate(-180deg); }
+    100% { transform: translate(-50%, -50%) rotate(540deg) translateX(160px) rotate(-540deg); }
+  }
+  .hero-glow-wrap {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .hero-orb {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 12px 4px rgba(62,207,142,0.5);
+    animation: orbit 12s linear infinite;
+  }
+  .hero-orb-2 {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px 3px rgba(62,207,142,0.35);
+    animation: orbit2 18s linear infinite;
+  }
+  .hero-bg-glow {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px; height: 400px;
+    background: radial-gradient(ellipse, rgba(62,207,142,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero { position: relative; }
+  .hero .container { position: relative; z-index: 1; }
+
+  /* Grid background sutil */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(62,207,142,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(62,207,142,0.03) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .sticky-bar, section, footer { position: relative; z-index: 1; }
+
+  /* Contadores animados */
+  .stat-num { transition: none; }
+
+  /* Cards stagger */
+  .mode-card, .kit-item {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity .4s ease, transform .4s ease, border-color .2s;
+  }
+  .mode-card.visible, .kit-item.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Línea animada bajo títulos */
+  .animated-line {
+    width: 0;
+    height: 2px;
+    background: var(--accent);
+    border-radius: 1px;
+    margin: 1.25rem 0;
+    transition: width .8s ease;
+  }
+  .animated-line.visible { width: 48px; }
+
+  /* Pulse en botones CTA */
+  .btn-primary, .btn-primary-lg {
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-primary::after, .btn-primary-lg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.12);
+    opacity: 0;
+    transition: opacity .15s;
+  }
+  .btn-primary:hover::after, .btn-primary-lg:hover::after { opacity: 1; }
+
+  /* Typing cursor en eyebrow */
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+  .cursor {
+    display: inline-block;
+    width: 2px; height: 14px;
+    background: var(--accent);
+    margin-left: 3px;
+    vertical-align: middle;
+    animation: blink 1s step-end infinite;
+  }
+
+  /* ── STICKY BAR ── */
+  .sticky-bar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: #0D0D0D;
+    border-bottom: 1px solid var(--border);
+    padding: .55rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .75rem;
+  }
+  .sticky-bar-text {
+    font-family: 'Geist', sans-serif;
+    font-size: 13px;
+    color: var(--dim);
+    letter-spacing: .02em;
+  }
+  .sticky-bar-text span {
+    color: var(--base);
+    font-weight: 500;
+  }
+  .countdown-display {
+    font-family: 'Geist Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: .08em;
+    text-shadow: 0 0 8px rgba(62,207,142,0.5);
+    min-width: 42px;
+    display: inline-block;
+  }
+  .sticky-cta {
+    font-family: 'Geist', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--bg);
+    background: var(--accent);
+    border: none;
+    border-radius: 4px;
+    padding: .3rem .75rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: opacity .15s;
+    letter-spacing: .01em;
+    white-space: nowrap;
+  }
+  .sticky-cta:hover { opacity: .85; }
+
+  /* ── LAYOUT ── */
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+  section { padding: 5rem 0; }
+  section + section { border-top: 1px solid var(--border); }
+
+  /* ── LOGO ── */
+  .logo-ascii {
+    font-family: 'Geist Mono', monospace;
+    font-size: 7px;
+    line-height: 1.2;
+    color: var(--accent);
+    text-shadow: 0 0 8px rgba(62,207,142,0.65), 0 0 20px rgba(62,207,142,0.25);
+    white-space: pre;
+    display: block;
+    animation: glow-pulse 3s ease-in-out infinite;
+  }
+  @keyframes glow-pulse {
+    0%, 100% { text-shadow: 0 0 8px rgba(62,207,142,0.65), 0 0 20px rgba(62,207,142,0.25); }
+    50% { text-shadow: 0 0 14px rgba(62,207,142,0.95), 0 0 32px rgba(62,207,142,0.50); }
+  }
+
+  /* ── HERO ── */
+  .hero {
+    padding-top: 8rem;
+    padding-bottom: 5rem;
+    text-align: center;
+  }
+  .hero-logo-wrap { margin-bottom: 2.5rem; display: flex; justify-content: center; }
+  .hero-eyebrow {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+  }
+  .hero-eyebrow::before, .hero-eyebrow::after {
+    content: '';
+    width: 32px;
+    height: 1px;
+    background: var(--accent-border);
+  }
+  .hero h1 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700;
+    letter-spacing: -.02em;
+    line-height: 1.15;
+    color: var(--base);
+    margin-bottom: 1.25rem;
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .hero h1 .accent { color: var(--accent); }
+  .hero-sub {
+    font-size: 16px;
+    color: var(--dim);
+    max-width: 520px;
+    margin: 0 auto 2rem;
+    line-height: 1.7;
+  }
+  .hero-countdown {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 99px;
+    padding: .35rem .9rem;
+    font-family: 'Geist Mono', monospace;
+    font-size: 12px;
+    color: var(--dim);
+    margin-bottom: 1.5rem;
+    letter-spacing: .03em;
+  }
+  .hero-countdown .cd { color: var(--accent); font-weight: 700; }
+  .cta-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .75rem;
+  }
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    background: var(--accent);
+    color: #0A0A0A;
+    font-family: 'Geist', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    padding: .85rem 2rem;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: opacity .15s, transform .1s;
+    letter-spacing: -.01em;
+  }
+  .btn-primary:hover { opacity: .9; transform: translateY(-1px); }
+  .btn-primary:active { transform: translateY(0); }
+  .price-display {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    font-size: 13px;
+    color: var(--dim);
+  }
+  .price-real {
+    font-family: 'Geist', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--base);
+  }
+  .price-old {
+    text-decoration: line-through;
+    color: var(--dim2);
+    font-size: 14px;
+  }
+  .price-badge {
+    background: rgba(62,207,142,.1);
+    border: 1px solid var(--accent-border);
+    color: var(--accent);
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    padding: .15rem .45rem;
+    border-radius: 3px;
+    text-transform: uppercase;
+  }
+
+  /* ── SECTION HEADERS ── */
+  .section-label {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: .75rem;
+  }
+  .section-h2 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    letter-spacing: -.02em;
+    line-height: 1.2;
+    color: var(--base);
+    margin-bottom: 1rem;
+  }
+  .section-sub {
+    font-size: 15px;
+    color: var(--dim);
+    max-width: 560px;
+    line-height: 1.75;
+    margin-bottom: 2.5rem;
+  }
+
+  /* ── PROBLEMA ── */
+  .problem-body {
+    font-size: 16px;
+    color: var(--mid);
+    line-height: 1.85;
+    max-width: 640px;
+  }
+  .problem-body strong { color: var(--base); font-weight: 600; }
+
+  /* ── MODOS ── */
+  .modes-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+  @media (max-width: 540px) { .modes-grid { grid-template-columns: 1fr; } }
+  .mode-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+    transition: border-color .2s;
+  }
+  .mode-card:hover { border-color: var(--accent-border); }
+  .mode-badge {
+    font-family: 'Geist Mono', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: .2rem .5rem;
+    border-radius: 3px;
+    display: inline-block;
+    margin-bottom: .75rem;
+  }
+  .badge-green { background: rgba(62,207,142,.1); color: var(--accent); border: 1px solid var(--accent-border); }
+  .badge-cyan { background: rgba(6,182,212,.1); color: var(--cyan); border: 1px solid rgba(6,182,212,.3); }
+  .badge-purple { background: rgba(168,85,247,.1); color: var(--purple); border: 1px solid rgba(168,85,247,.3); }
+  .badge-pink { background: rgba(255,110,180,.1); color: var(--pink); border: 1px solid rgba(255,110,180,.3); }
+  .mode-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--base);
+    margin-bottom: .35rem;
+    letter-spacing: -.01em;
+  }
+  .mode-desc {
+    font-size: 13px;
+    color: var(--dim);
+    line-height: 1.6;
+  }
+
+  /* ── STARTER KITS ── */
+  .kits-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: .6rem;
+    margin-bottom: 2.5rem;
+  }
+  @media (max-width: 640px) { .kits-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 400px) { .kits-grid { grid-template-columns: 1fr; } }
+  .kit-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: .75rem 1rem;
+    transition: border-color .2s, background .2s;
+  }
+  .kit-item:hover { border-color: var(--accent-border); background: var(--accent-dim); }
+  .kit-name {
+    font-family: 'Geist', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--base);
+    margin-bottom: .2rem;
+  }
+  .kit-sub {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    color: var(--dim2);
+    letter-spacing: .04em;
+  }
+
+  /* ── VIDEO ── */
+  .video-placeholder {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    aspect-ratio: 16/9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .video-placeholder::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(62,207,142,0.04) 0%, transparent 70%);
+  }
+  .play-btn {
+    width: 56px; height: 56px;
+    background: var(--accent);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+  }
+  .play-btn::after {
+    content: '';
+    border-left: 20px solid #0A0A0A;
+    border-top: 12px solid transparent;
+    border-bottom: 12px solid transparent;
+    margin-left: 4px;
+  }
+  .video-label {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--dim);
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 1;
+  }
+  .video-stats {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+  }
+  .stat-item {
+    text-align: center;
+  }
+  .stat-num {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: -.02em;
+    display: block;
+  }
+  .stat-label {
+    font-size: 12px;
+    color: var(--dim);
+    letter-spacing: .04em;
+  }
+
+  /* ── CATÁLOGO ── */
+  .badges-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    margin-bottom: 1rem;
+  }
+  .cat-badge {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: .3rem .7rem;
+    border-radius: 3px;
+    border: 1px solid;
+  }
+  .cat-strat { color: #A855F7; border-color: rgba(168,85,247,.3); background: rgba(168,85,247,.08); }
+  .cat-creat { color: #FF6EB4; border-color: rgba(255,110,180,.3); background: rgba(255,110,180,.08); }
+  .cat-dsgn  { color: #06B6D4; border-color: rgba(6,182,212,.3);  background: rgba(6,182,212,.08); }
+  .cat-data  { color: #E8A04A; border-color: rgba(232,160,74,.3);  background: rgba(232,160,74,.08); }
+  .cat-soc   { color: #3ECF8E; border-color: rgba(62,207,142,.3);  background: rgba(62,207,142,.08); }
+  .cat-tech  { color: #06B6D4; border-color: rgba(6,182,212,.3);   background: rgba(6,182,212,.08); }
+  .cat-sec   { color: #EF4444; border-color: rgba(239,68,68,.3);   background: rgba(239,68,68,.08); }
+  .cat-ops   { color: #E8A04A; border-color: rgba(232,160,74,.3);  background: rgba(232,160,74,.08); }
+  .cat-game  { color: #C084FC; border-color: rgba(192,132,252,.3); background: rgba(192,132,252,.08); }
+  .cat-legal { color: #888888; border-color: rgba(136,136,136,.3); background: rgba(136,136,136,.08); }
+  .cat-fin   { color: #E8A04A; border-color: rgba(232,160,74,.3);  background: rgba(232,160,74,.08); }
+  .cat-ai    { color: #00E5FF; border-color: rgba(0,229,255,.3);   background: rgba(0,229,255,.08); }
+  .cat-psy   { color: #FF6EB4; border-color: rgba(255,110,180,.3); background: rgba(255,110,180,.08); }
+  .cat-edu   { color: #3ECF8E; border-color: rgba(62,207,142,.3);  background: rgba(62,207,142,.08); }
+  .cat-web3  { color: #C084FC; border-color: rgba(192,132,252,.3); background: rgba(192,132,252,.08); }
+  .cat-note {
+    font-size: 13px;
+    color: var(--dim);
+    margin-top: 1rem;
+    line-height: 1.7;
+  }
+
+  /* ── FAQ ── */
+  .faq-list { list-style: none; margin-bottom: 2.5rem; }
+  .faq-item {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: .5rem;
+    transition: border-color .2s;
+  }
+  .faq-item.open { border-color: var(--accent-border); }
+  .faq-q {
+    width: 100%;
+    background: var(--surface);
+    border: none;
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    font-family: 'Geist', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--base);
+    text-align: left;
+    gap: 1rem;
+    transition: background .15s;
+  }
+  .faq-q:hover { background: #161616; }
+  .faq-icon {
+    font-family: 'Geist Mono', monospace;
+    font-size: 16px;
+    color: var(--accent);
+    flex-shrink: 0;
+    transition: transform .2s;
+    line-height: 1;
+  }
+  .faq-item.open .faq-icon { transform: rotate(45deg); }
+  .faq-a {
+    background: #0D0D0D;
+    padding: 0 1.25rem;
+    font-size: 13px;
+    color: var(--dim);
+    line-height: 1.75;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .3s ease, padding .3s ease;
+  }
+  .faq-item.open .faq-a { max-height: 200px; padding: .85rem 1.25rem 1rem; }
+  .faq-a a { color: var(--accent); text-decoration: none; }
+  .faq-a a:hover { text-decoration: underline; }
+
+  /* ── CIERRE ── */
+  .close-section { text-align: center; }
+  .close-section .section-h2 { font-size: clamp(1.75rem, 4vw, 2.5rem); margin-bottom: .75rem; }
+  .close-section .section-sub { margin-left: auto; margin-right: auto; }
+  .close-price {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: .75rem;
+    margin: 1.75rem 0;
+  }
+  .close-price-real {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: -.03em;
+    text-shadow: 0 0 24px rgba(62,207,142,0.25);
+  }
+  .close-price-old {
+    font-size: 22px;
+    color: var(--dim2);
+    text-decoration: line-through;
+  }
+  .btn-primary-lg {
+    display: inline-flex;
+    align-items: center;
+    gap: .6rem;
+    background: var(--accent);
+    color: #0A0A0A;
+    font-family: 'Geist', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    padding: 1rem 2.5rem;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: opacity .15s, transform .1s, box-shadow .15s;
+    letter-spacing: -.01em;
+    box-shadow: 0 0 24px rgba(62,207,142,0.2);
+  }
+  .btn-primary-lg:hover { opacity: .9; transform: translateY(-1px); box-shadow: 0 0 36px rgba(62,207,142,0.35); }
+  .close-microcopy {
+    margin-top: 1rem;
+    font-size: 12px;
+    color: var(--dim2);
+    letter-spacing: .02em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    flex-wrap: wrap;
+  }
+  .close-microcopy span::after { content: '·'; margin-left: .5rem; }
+  .close-microcopy span:last-child::after { content: ''; }
+
+  /* ── CTA MID SECTION ── */
+  .mid-cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  /* ── POPUP EXPIRACIÓN ── */
+  .popup-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.75);
+    backdrop-filter: blur(4px);
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .3s ease;
+  }
+  .popup-overlay.visible {
+    opacity: 1;
+    pointer-events: all;
+  }
+  .popup-box {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 10px;
+    padding: 2rem 2rem 1.75rem;
+    max-width: 420px;
+    width: 100%;
+    position: relative;
+    transform: translateY(16px);
+    transition: transform .3s ease;
+  }
+  .popup-overlay.visible .popup-box { transform: translateY(0); }
+  .popup-icon {
+    font-size: 28px;
+    margin-bottom: .75rem;
+    display: block;
+  }
+  .popup-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--base);
+    letter-spacing: -.01em;
+    line-height: 1.25;
+    margin-bottom: .5rem;
+  }
+  .popup-sub {
+    font-size: 13px;
+    color: var(--dim);
+    line-height: 1.65;
+    margin-bottom: 1.5rem;
+  }
+  .popup-divider {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    margin: 1.25rem 0;
+  }
+  .popup-divider::before, .popup-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border2);
+  }
+  .popup-divider span {
+    font-size: 11px;
+    color: var(--dim2);
+    font-family: 'Geist Mono', monospace;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .btn-full-price {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border2);
+    color: var(--mid);
+    font-family: 'Geist', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    padding: .8rem 1.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: border-color .15s, color .15s;
+    margin-bottom: 1.25rem;
+  }
+  .btn-full-price:hover { border-color: var(--dim); color: var(--base); }
+  .btn-full-price .fp-price { color: var(--base); font-weight: 600; }
+  .popup-form {
+    display: flex;
+    flex-direction: column;
+    gap: .6rem;
+  }
+  .popup-form-label {
+    font-size: 13px;
+    color: var(--dim);
+    margin-bottom: .25rem;
+  }
+  .popup-input {
+    background: #0D0D0D;
+    border: 1px solid var(--border2);
+    border-radius: 5px;
+    padding: .7rem 1rem;
+    font-family: 'Geist', sans-serif;
+    font-size: 14px;
+    color: var(--base);
+    outline: none;
+    width: 100%;
+    transition: border-color .15s;
+  }
+  .popup-input::placeholder { color: var(--dim2); }
+  .popup-input:focus { border-color: var(--accent-border); }
+  .btn-coupon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    width: 100%;
+    background: var(--accent-dim);
+    border: 1px solid var(--accent-border);
+    color: var(--accent);
+    font-family: 'Geist', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    padding: .75rem 1.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background .15s;
+    margin-top: .25rem;
+  }
+  .btn-coupon:hover { background: rgba(62,207,142,.18); }
+  .popup-microcopy {
+    font-size: 11px;
+    color: var(--dim2);
+    text-align: center;
+    margin-top: 1rem;
+    letter-spacing: .02em;
+  }
+  .popup-close {
+    position: absolute;
+    top: 1rem; right: 1rem;
+    background: none;
+    border: none;
+    color: var(--dim2);
+    font-size: 18px;
+    cursor: pointer;
+    line-height: 1;
+    padding: .25rem;
+    transition: color .15s;
+  }
+  .popup-close:hover { color: var(--base); }
+  .popup-success {
+    text-align: center;
+    padding: 1rem 0;
+    display: none;
+  }
+  .popup-success-icon { font-size: 36px; margin-bottom: .75rem; display: block; }
+  .popup-success-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: .5rem;
+  }
+  .popup-success-sub { font-size: 13px; color: var(--dim); line-height: 1.65; }
+
+  /* ── FOOTER ── */
+  .footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem 0;
+    text-align: center;
+  }
+  .footer-logo {
+    font-family: 'Geist Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    color: var(--accent);
+    margin-bottom: .5rem;
+  }
+  .footer-copy {
+    font-size: 12px;
+    color: var(--dim2);
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    width: 48px;
+    height: 2px;
+    background: var(--accent);
+    border-radius: 1px;
+    margin: 1.25rem 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- ── POPUP EXPIRACIÓN ── -->
+<div class="popup-overlay" id="expiry-popup">
+  <div class="popup-box">
+    <button class="popup-close" onclick="closePopup()" aria-label="Cerrar">✕</button>
+
+    <div id="popup-main">
+      <span class="popup-icon">⏰</span>
+      <p class="popup-title">El tiempo de la oferta se agotó.</p>
+      <p class="popup-sub">El precio de lanzamiento de <strong style="color:var(--base)">$9.90</strong> ya no está disponible.<br>Podés conseguirlo al precio regular, o dejarnos tu mail y te mandamos un cupón de descuento.</p>
+
+      <a href="https://REEMPLAZAR-CON-LINK-LEMONSQUEEZY.com" class="btn-full-price lemonsqueezy-button">
+        Conseguirlo al precio regular — <span class="fp-price">$29</span>
+      </a>
+
+      <div class="popup-divider"><span>O conseguí tu cupón</span></div>
+
+      <div class="popup-form">
+        <p class="popup-form-label">Dejá tu mail y te enviamos un código de descuento.</p>
+        <input type="email" class="popup-input" id="popup-email" placeholder="tu@mail.com">
+        <button class="btn-coupon" onclick="submitCoupon()">
+          Quiero mi cupón →
+        </button>
+      </div>
+
+      <p class="popup-microcopy">Sin spam. Solo el cupón, una sola vez.</p>
+    </div>
+
+    <div class="popup-success" id="popup-success">
+      <span class="popup-success-icon">✅</span>
+      <p class="popup-success-title">¡Listo! Revisá tu mail.</p>
+      <p class="popup-success-sub">Te mandamos el cupón de descuento.<br>Válido por 24 horas.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── STICKY BAR ── -->
+<div class="sticky-bar">
+  <p class="sticky-bar-text">⚡ Precio de lanzamiento — Quedan <span class="countdown-display" id="cd-sticky">15:00</span></p>
+  <a href="https://REEMPLAZAR-CON-LINK-LEMONSQUEEZY.com" class="sticky-cta lemonsqueezy-button">Conseguirlo $9.90</a>
+</div>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-glow-wrap">
+    <div class="hero-bg-glow"></div>
+    <div class="hero-orb"></div>
+    <div class="hero-orb-2"></div>
+  </div>
+  <div class="container">
+    <div class="hero-logo-wrap">
+      <span class="logo-ascii">███████╗ █████╗ ███████╗██╗   ██╗   ██████╗██████╗ ███████╗██╗    ██╗
+██╔════╝██╔══██╗██╔════╝╚██╗ ██╔╝  ██╔════╝██╔══██╗██╔════╝██║    ██║
+█████╗  ███████║███████╗ ╚████╔╝   ██║     ██████╔╝█████╗  ██║ █╗ ██║
+██╔══╝  ██╔══██║╚════██║  ╚██╔╝    ██║     ██╔══██╗██╔══╝  ██║███╗██║
+███████╗██║  ██║███████║   ██║     ╚██████╗██║  ██╗███████╗╚███╔███╔╝
+╚══════╝╚═╝  ╚═╝╚══════╝   ╚═╝      ╚═════╝╚═╝  ╚═╝╚══════╝ ╚══╝╚══╝</span>
+    </div>
+
+    <p class="hero-eyebrow reveal">Para Claude Code<span class="cursor"></span></p>
+
+    <h1 class="reveal reveal-delay-1">TU EQUIPO DE AGENTES IA,<br>LISTO Y EQUIPADO, A <span class="accent">UNOS POCOS CLICKS</span> DE DISTANCIA.</h1>
+
+    <p class="hero-sub reveal reveal-delay-2">Sin configuraciones. Sin setup. Abrís el archivo, elegís tu equipo y pegás el prompt en Claude Code.</p>
+
+    <div class="hero-countdown reveal reveal-delay-3">
+      ⚡ Precio de lanzamiento — Quedan <span class="countdown-display cd" id="cd-hero">15:00</span>
+    </div>
+
+    <div class="cta-group reveal reveal-delay-4">
+      <a href="https://REEMPLAZAR-CON-LINK-LEMONSQUEEZY.com" class="btn-primary lemonsqueezy-button">
+        Conseguirlo por $9.90 →
+      </a>
+      <div class="price-display">
+        <span class="price-real">$9.90</span>
+        <span class="price-old">$29</span>
+        <span class="price-badge">67% off</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PROBLEMA ── -->
+<section>
+  <div class="container">
+    <p class="section-label reveal">El problema</p>
+    <h2 class="section-h2 reveal reveal-delay-1">Claude Code es poderoso.<br>Pero lo estás usando solo.</h2>
+    <div class="animated-line reveal"></div>
+    <p class="problem-body">
+      Por defecto, Claude responde como un <strong>asistente genérico</strong>. Sin rol. Sin estructura. Sin especialización.<br><br>
+      EasyCrewAI configura una sesión donde Claude opera como un <strong>equipo real</strong> — cada agente con identidad, expertise y reglas propias. El resultado es un prompt estructurado que incluye quiénes están en el equipo, cómo invocar a cada uno, cuáles son sus reglas de coordinación y qué skills ejecutar al arrancar.
+    </p>
+  </div>
+</section>
+
+<!-- ── 4 MODOS ── -->
+<section>
+  <div class="container">
+    <p class="section-label reveal">Qué incluye</p>
+    <h2 class="section-h2 reveal reveal-delay-1">Cuatro formas de trabajar.<br>Una sola herramienta.</h2>
+    <p class="section-sub reveal reveal-delay-2">Todo en un archivo HTML que abrís directo en tu browser. Sin instalación. Sin servidor. Sin conexión requerida.</p>
+
+    <div class="modes-grid">
+      <div class="mode-card">
+        <span class="mode-badge badge-green">Hasta 8</span>
+        <p class="mode-title">Team Craft</p>
+        <p class="mode-desc">Armás un equipo de hasta 8 agentes a medida de tu proyecto. Vos elegís quién participa y cómo se coordinan.</p>
+      </div>
+      <div class="mode-card">
+        <span class="mode-badge badge-cyan">22 Kits</span>
+        <p class="mode-title">Starter Kits</p>
+        <p class="mode-desc">22 equipos prearmados por caso de uso. Hacés click en uno, revisás quién está incluido y lo activás.</p>
+      </div>
+      <div class="mode-card">
+        <span class="mode-badge badge-purple">1 Agente</span>
+        <p class="mode-title">Agente</p>
+        <p class="mode-desc">Un solo especialista para conversación directa. Sin overhead de equipo, para tareas puntuales y rápidas.</p>
+      </div>
+      <div class="mode-card">
+        <span class="mode-badge badge-pink">Custom</span>
+        <p class="mode-title">Crear Agente</p>
+        <p class="mode-desc">Describís lo que necesitás y la app sugiere un agente personalizado con skills recomendados.</p>
+      </div>
+    </div>
+
+    <div class="mid-cta">
+      <a href="https://REEMPLAZAR-CON-LINK-LEMONSQUEEZY.com" class="btn-primary lemonsqueezy-button">
+        Conseguirlo por $9.90 →
+      </a>
+      <div class="price-display">
+        <span class="price-real">$9.90</span>
+        <span class="price-old">$29</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── STARTER KITS ── -->
+<section>
+  <div class="container">
+    <p class="section-label reveal">Starter Kits</p>
+    <h2 class="section-h2 reveal reveal-delay-1">22 equipos listos.<br>Para el proyecto que tengas hoy.</h2>
+    <p class="section-sub reveal reveal-delay-2">No arrancás de cero. Elegís el kit, revisás quién está en el equipo y lo activás con un click.</p>
+
+    <div class="kits-grid">
+      <div class="kit-item"><p class="kit-name">The Full Stack</p><p class="kit-sub">Dev Completo</p></div>
+      <div class="kit-item"><p class="kit-name">Zero to Launch</p><p class="kit-sub">Startup Kit</p></div>
+      <div class="kit-item"><p class="kit-name">Pocket Product</p><p class="kit-sub">App Mínima</p></div>
+      <div class="kit-item"><p class="kit-name">Enterprise Ready</p><p class="kit-sub">SaaS B2B</p></div>
+      <div class="kit-item"><p class="kit-name">The Connector</p><p class="kit-sub">APIs e Integraciones</p></div>
+      <div class="kit-item"><p class="kit-name">Data Engine</p><p class="kit-sub">Producto de Datos</p></div>
+      <div class="kit-item"><p class="kit-name">AI Foundry</p><p class="kit-sub">Agentes & Custom</p></div>
+      <div class="kit-item"><p class="kit-name">The Shield</p><p class="kit-sub">Seguridad & Auditoría</p></div>
+      <div class="kit-item"><p class="kit-name">Shop Builder</p><p class="kit-sub">E-commerce</p></div>
+      <div class="kit-item"><p class="kit-name">The Content Machine</p><p class="kit-sub">Contenido & Growth</p></div>
+      <div class="kit-item"><p class="kit-name">Launch Pad</p><p class="kit-sub">Lanzamiento de Producto</p></div>
+      <div class="kit-item"><p class="kit-name">Brand Studio</p><p class="kit-sub">Marca & Identidad</p></div>
+      <div class="kit-item"><p class="kit-name">The Amplifier</p><p class="kit-sub">Comunidad & Redes</p></div>
+      <div class="kit-item"><p class="kit-name">The Design System</p><p class="kit-sub">Sistema de Diseño</p></div>
+      <div class="kit-item"><p class="kit-name">The UX Lab</p><p class="kit-sub">UX Research & Tests</p></div>
+      <div class="kit-item"><p class="kit-name">First Impression</p><p class="kit-sub">Landing de Alta Conversión</p></div>
+      <div class="kit-item"><p class="kit-name">Game Dev Squad</p><p class="kit-sub">Juego Indie</p></div>
+      <div class="kit-item"><p class="kit-name">Legal Layer</p><p class="kit-sub">Cobertura Legal Digital</p></div>
+      <div class="kit-item"><p class="kit-name">Money Matters</p><p class="kit-sub">Finanzas</p></div>
+      <div class="kit-item"><p class="kit-name">The Academy</p><p class="kit-sub">Plataforma Educativa</p></div>
+      <div class="kit-item"><p class="kit-name">The Conversion Lab</p><p class="kit-sub">CRO & Comportamiento</p></div>
+      <div class="kit-item"><p class="kit-name">People First</p><p class="kit-sub">Cultura & Organización</p></div>
+    </div>
+
+    <div class="mid-cta">
+      <a href="https://REEMPLAZAR-CON-LINK-LEMONSQUEEZY.com" class="btn-primary lemonsqueezy-button">
+        Conseguirlo por $9.90 →
+      </a>
+      <div class="price-display">
+        <span class="price-real">$9.90</span>
+        <span class="price-old">$29</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── VIDEO ── -->
+<section>
+  <div class="container">
+    <p class="section-label reveal">En acción</p>
+    <h2 class="section-h2 reveal reveal-delay-1">Miralo funcionar.</h2>
+    <p class="section-sub reveal reveal-delay-2">Del archivo al equipo operando en Claude Code — en menos de 2 minutos.</p>
+
+    <video id="demo-video" loop muted playsinline preload="auto" style="width:100%;border-radius:8px;display:block;background:#000;margin-bottom:2rem;">
+      <source src="demo.mp4" type="video/mp4">
+    </video>
+
+    <div class="video-stats">
+      <div class="stat-item">
+        <span class="stat-num">101</span>
+        <span class="stat-label">Agentes</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">16</span>
+        <span class="stat-label">Categorías</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">22</span>
+        <span class="stat-label">Starter Kits</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">1</span>
+        <span class="stat-label">Solo archivo</span>
+      </div>
+    </div>
+
+    <div class="mid-cta">
+      <a href="https://REEMPLAZAR-CON-LINK-LEMONSQUEEZY.com" class="btn-primary lemonsqueezy-button">
+        Conseguirlo por $9.90 →
+      </a>
+      <div class="price-display">
+        <span class="price-real">$9.90</span>
+        <span class="price-old">$29</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CATÁLOGO ── -->
+<section>
+  <div class="container">
+    <p class="section-label reveal">El catálogo</p>
+    <h2 class="section-h2 reveal reveal-delay-1">101 agentes. 16 categorías.</h2>
+    <p class="section-sub reveal reveal-delay-2">Cada agente tiene nombre, rol, personalidad, frases características y skills ejecutables directamente en Claude Code.</p>
+
+    <div class="badges-grid">
+      <span class="cat-badge cat-strat">STRAT</span>
+      <span class="cat-badge cat-creat">CREAT</span>
+      <span class="cat-badge cat-dsgn">DSGN</span>
+      <span class="cat-badge cat-data">DATA</span>
+      <span class="cat-badge cat-soc">SOC</span>
+      <span class="cat-badge cat-tech">TECH</span>
+      <span class="cat-badge cat-sec">SEC</span>
+      <span class="cat-badge cat-ops">OPS</span>
+      <span class="cat-badge cat-game">GAME</span>
+      <span class="cat-badge cat-legal">LEGAL</span>
+      <span class="cat-badge cat-fin">FIN</span>
+      <span class="cat-badge cat-ai">AI</span>
+      <span class="cat-badge cat-psy">PSY</span>
+      <span class="cat-badge cat-edu">EDU</span>
+      <span class="cat-badge cat-web3">WEB3</span>
+    </div>
+    <p class="cat-note">Cada agente viene con aliases de invocación, ejemplos de uso y comandos npx de skills reales de GitHub — ejecutables directo en Claude Code para ampliar sus capacidades.</p>
+  </div>
+</section>
+
+<!-- ── FAQ ── -->
+<section>
+  <div class="container">
+    <p class="section-label reveal">FAQ</p>
+    <h2 class="section-h2 reveal reveal-delay-1">Preguntas frecuentes.</h2>
+
+    <ul class="faq-list" id="faq">
+      <li class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          ¿Necesito instalar algo?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">No. EasyCrewAI es un archivo HTML standalone. Lo descargás, lo abrís en tu browser y lo usás directamente en Claude Code. Sin servidor, sin instalación, sin cuenta.</div>
+      </li>
+      <li class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          ¿Funciona con cualquier plan de Claude?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">Requiere acceso a Claude Code, disponible en el plan Claude Pro ($20/mes) o mediante la API de Anthropic. Si ya usás Claude Code en tu día a día, EasyCrewAI funciona sin ninguna configuración adicional.</div>
+      </li>
+      <li class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          ¿Qué incluye exactamente?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">El ZIP incluye tres archivos: EasyCrewAI.html (la interfaz principal con todos los agentes), agents-bank.md (los 101 perfiles completos) y START-HERE.txt (guía de inicio en 3 pasos).</div>
+      </li>
+      <li class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          ¿Cuánto tiempo lleva configurar la primera sesión?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">Elegís uno de los 22 Starter Kits según tu proyecto, copiás el prompt que genera EasyCrewAI y lo pegás en Claude Code. Así de simple. La mayoría de usuarios tiene su equipo operando antes de terminar el café.</div>
+      </li>
+      <li class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          ¿Recibo actualizaciones si el producto mejora?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">Sí. Cuando haya una versión nueva, la actualizamos en Lemon Squeezy y podés re-descargarla desde tu biblioteca en cualquier momento. Sin costo adicional.</div>
+      </li>
+    </ul>
+
+    <div class="mid-cta">
+      <a href="https://REEMPLAZAR-CON-LINK-LEMONSQUEEZY.com" class="btn-primary lemonsqueezy-button">
+        Conseguirlo por $9.90 →
+      </a>
+      <div class="price-display">
+        <span class="price-real">$9.90</span>
+        <span class="price-old">$29</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CIERRE ── -->
+<section class="close-section">
+  <div class="container">
+    <p class="section-label reveal">Sumá tu equipo</p>
+    <h2 class="section-h2 reveal reveal-delay-1">Un equipo de agentes IA.<br>Por menos que un café.</h2>
+    <p class="section-sub reveal reveal-delay-2">Sin suscripción. Sin servidor. Sin vencimiento.<br>Un pago, tuyo para siempre.</p>
+
+    <div class="close-price">
+      <span class="close-price-real">$9.90</span>
+      <span class="close-price-old">$29</span>
+      <span class="price-badge">67% off</span>
+    </div>
+
+    <a href="https://REEMPLAZAR-CON-LINK-LEMONSQUEEZY.com" class="btn-primary-lg lemonsqueezy-button">
+      Conseguir EasyCrewAI →
+    </a>
+
+    <div class="close-microcopy">
+      <span>Pago seguro vía Lemon Squeezy</span>
+      <span>Entrega instantánea</span>
+      <span>Actualizaciones incluidas</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer class="footer">
+  <div class="container">
+    <p class="footer-logo">EASYCREW AI</p>
+    <p class="footer-copy">© 2026 EasyCrewAI · easycrewai.ai</p>
+  </div>
+</footer>
+
+<script>
+  // ── COUNTDOWN ──
+  const DURATION = 15 * 60;
+  let remaining = DURATION;
+  let popupShown = false;
+
+  function formatTime(s) {
+    const m = Math.floor(s / 60);
+    const sec = s % 60;
+    return String(m).padStart(2, '0') + ':' + String(sec).padStart(2, '0');
+  }
+
+  function showPopup() {
+    document.getElementById('expiry-popup').classList.add('visible');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closePopup() {
+    document.getElementById('expiry-popup').classList.remove('visible');
+    document.body.style.overflow = '';
+    // Reiniciar countdown después de cerrar
+    remaining = DURATION;
+    popupShown = false;
+  }
+
+  function submitCoupon() {
+    const email = document.getElementById('popup-email').value.trim();
+    if (!email || !email.includes('@')) {
+      document.getElementById('popup-email').style.borderColor = 'var(--red)';
+      return;
+    }
+    // Acá va la integración con tu sistema de mail (Mailchimp, ConvertKit, etc.)
+    // Por ahora mostramos el estado de éxito
+    document.getElementById('popup-main').style.display = 'none';
+    document.getElementById('popup-success').style.display = 'block';
+  }
+
+  // Cerrar popup clickeando el overlay
+  document.getElementById('expiry-popup').addEventListener('click', function(e) {
+    if (e.target === this) closePopup();
+  });
+
+  function tick() {
+    remaining--;
+    if (remaining <= 0) {
+      if (!popupShown) {
+        popupShown = true;
+        showPopup();
+      }
+      remaining = DURATION; // reinicia para el countdown visible
+    }
+    const t = formatTime(remaining);
+    document.getElementById('cd-sticky').textContent = t;
+    document.getElementById('cd-hero').textContent = t;
+  }
+
+  setInterval(tick, 1000);
+
+  // ── REVEAL ON SCROLL ──
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+  // Activar hero inmediatamente
+  document.querySelectorAll('.hero .reveal').forEach((el, i) => {
+    setTimeout(() => el.classList.add('visible'), i * 120);
+  });
+
+  // ── ANIMATED LINE ──
+  const lineObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        lineObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('.animated-line').forEach(el => lineObserver.observe(el));
+
+  // ── CARDS STAGGER ──
+  const cardObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const cards = entry.target.querySelectorAll('.mode-card, .kit-item');
+        cards.forEach((card, i) => {
+          setTimeout(() => card.classList.add('visible'), i * 60);
+        });
+        cardObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.modes-grid, .kits-grid').forEach(el => cardObserver.observe(el));
+
+  // ── CONTADORES ANIMADOS ──
+  function animateCounter(el, target, duration = 1200) {
+    let start = 0;
+    const step = target / (duration / 16);
+    const timer = setInterval(() => {
+      start += step;
+      if (start >= target) { start = target; clearInterval(timer); }
+      el.textContent = Math.floor(start);
+    }, 16);
+  }
+
+  const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.querySelectorAll('.stat-num').forEach(el => {
+          const target = parseInt(el.textContent);
+          el.textContent = '0';
+          animateCounter(el, target);
+        });
+        counterObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.5 });
+  const statsEl = document.querySelector('.video-stats');
+  if (statsEl) counterObserver.observe(statsEl);
+
+  // ── VIDEO AUTOPLAY ON SCROLL ──
+  const demoVideo = document.getElementById('demo-video');
+  const videoObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        demoVideo.play();
+      } else {
+        demoVideo.pause();
+      }
+    });
+  }, { threshold: 0.4 });
+  videoObserver.observe(demoVideo);
+
+  // ── FAQ ACCORDION ──
+  function toggleFaq(btn) {
+    const item = btn.closest('.faq-item');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+</script>
+
+</body>
+</html>
