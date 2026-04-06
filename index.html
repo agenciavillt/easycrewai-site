@@ -871,6 +871,140 @@
   }
   .popup-success-sub { font-size: 13px; color: var(--dim); line-height: 1.65; }
 
+  /* ── GARANTÍA ── */
+  .guarantee {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .4rem;
+    font-size: 12px;
+    color: var(--dim);
+    margin-top: .6rem;
+    letter-spacing: .01em;
+  }
+  .guarantee-icon { color: var(--accent); font-size: 13px; }
+
+  /* ── TABLA COMPARATIVA ── */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2.5rem;
+  }
+  .compare-table th {
+    padding: .75rem 1rem;
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border2);
+  }
+  .compare-table th:first-child { text-align: left; color: var(--dim); }
+  .compare-table th:nth-child(2) { color: var(--dim2); text-align: center; }
+  .compare-table th:nth-child(3) { color: var(--accent); text-align: center; }
+  .compare-table td {
+    padding: .9rem 1rem;
+    font-size: 13px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .compare-table td:first-child { color: var(--mid); font-weight: 500; }
+  .compare-table td:nth-child(2) {
+    color: var(--dim2);
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .compare-table td:nth-child(3) {
+    color: var(--base);
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.5;
+    font-weight: 500;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:hover td { background: rgba(62,207,142,.02); }
+  .col-accent { color: var(--accent) !important; }
+  .col-dim { color: var(--dim2) !important; }
+  @media (max-width: 600px) {
+    .compare-table th, .compare-table td { padding: .6rem .5rem; font-size: 11px; }
+  }
+
+  /* ── MARKET TIMING ── */
+  .timing-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+  @media (max-width: 540px) { .timing-grid { grid-template-columns: 1fr; } }
+  .timing-stat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+    transition: border-color .2s;
+  }
+  .timing-stat:hover { border-color: var(--accent-border); }
+  .timing-num {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--accent);
+    letter-spacing: -.02em;
+    display: block;
+    margin-bottom: .25rem;
+  }
+  .timing-label {
+    font-size: 13px;
+    color: var(--dim);
+    line-height: 1.55;
+  }
+  .timing-label strong { color: var(--base); font-weight: 600; }
+
+  /* ── TESTIMONIOS ── */
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+  @media (max-width: 580px) { .testimonials-grid { grid-template-columns: 1fr; } }
+  .testimonial-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+    transition: border-color .2s;
+  }
+  .testimonial-card:hover { border-color: var(--accent-border); }
+  .testimonial-stars {
+    color: var(--accent);
+    font-size: 12px;
+    letter-spacing: .1em;
+    margin-bottom: .6rem;
+  }
+  .testimonial-text {
+    font-size: 13px;
+    color: var(--mid);
+    line-height: 1.75;
+    margin-bottom: .85rem;
+    font-style: italic;
+  }
+  .testimonial-author {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    color: var(--dim);
+    text-transform: uppercase;
+  }
+  .testimonial-role {
+    font-size: 11px;
+    color: var(--dim2);
+    margin-top: .15rem;
+  }
+
   /* ── FOOTER ── */
   .footer {
     border-top: 1px solid var(--border);
@@ -910,10 +1044,10 @@
     <div id="popup-main">
       <span class="popup-icon">⏰</span>
       <p class="popup-title">El tiempo de la oferta se agotó.</p>
-      <p class="popup-sub">El precio de lanzamiento de <strong style="color:var(--base)">$9.90</strong> ya no está disponible.<br>Podés conseguirlo al precio regular, o dejarnos tu mail y te mandamos un cupón de descuento.</p>
+      <p class="popup-sub">El precio de lanzamiento de <strong style="color:var(--base)">$19.90</strong> ya no está disponible.<br>Podés conseguirlo al precio regular, o dejarnos tu mail y te mandamos un cupón de descuento.</p>
 
       <a href="https://easycrewai.lemonsqueezy.com/checkout/buy/4160224e-7617-4b92-99d6-1a8b3514d77e" class="btn-full-price lemonsqueezy-button">
-        Conseguirlo al precio regular — <span class="fp-price">$29</span>
+        Conseguirlo al precio regular — <span class="fp-price">$199</span>
       </a>
 
       <div class="popup-divider"><span>O conseguí tu cupón</span></div>
@@ -940,7 +1074,7 @@
 <!-- ── STICKY BAR ── -->
 <div class="sticky-bar">
   <p class="sticky-bar-text">⚡ Precio de lanzamiento — Quedan <span class="countdown-display" id="cd-sticky">15:00</span></p>
-  <a href="https://easycrewai.lemonsqueezy.com/checkout/buy/4160224e-7617-4b92-99d6-1a8b3514d77e" class="sticky-cta lemonsqueezy-button">Conseguirlo $9.90</a>
+  <a href="https://easycrewai.lemonsqueezy.com/checkout/buy/4160224e-7617-4b92-99d6-1a8b3514d77e" class="sticky-cta lemonsqueezy-button">Conseguirlo $19.90</a>
 </div>
 
 <!-- ── HERO ── -->
@@ -972,13 +1106,14 @@
 
     <div class="cta-group reveal reveal-delay-4">
       <a href="https://easycrewai.lemonsqueezy.com/checkout/buy/4160224e-7617-4b92-99d6-1a8b3514d77e" class="btn-primary lemonsqueezy-button">
-        Conseguirlo por $9.90 →
+        Conseguirlo por $19.90 →
       </a>
       <div class="price-display">
-        <span class="price-real">$9.90</span>
-        <span class="price-old">$29</span>
-        <span class="price-badge">67% off</span>
+        <span class="price-real">$19.90</span>
+        <span class="price-old">$199</span>
+        <span class="price-badge">90% off</span>
       </div>
+      <p class="guarantee"><span class="guarantee-icon">✓</span> Garantía de devolución de 7 días — sin preguntas</p>
     </div>
   </div>
 </section>
@@ -993,6 +1128,69 @@
       Por defecto, Claude responde como un <strong>asistente genérico</strong>. Sin rol. Sin estructura. Sin especialización.<br><br>
       EasyCrewAI configura una sesión donde Claude opera como un <strong>equipo real</strong> — cada agente con identidad, expertise y reglas propias. El resultado es un prompt estructurado que incluye quiénes están en el equipo, cómo invocar a cada uno, cuáles son sus reglas de coordinación y qué skills ejecutar al arrancar.
     </p>
+  </div>
+</section>
+
+<!-- ── TABLA COMPARATIVA ── -->
+<section>
+  <div class="container">
+    <p class="section-label reveal">La diferencia</p>
+    <h2 class="section-h2 reveal reveal-delay-1">Lo que cambia cuando tenés<br>un equipo real en Claude Code.</h2>
+    <p class="section-sub reveal reveal-delay-2">Sin EasyCrewAI, Claude responde bien. Con EasyCrewAI, trabaja como un equipo especializado.</p>
+
+    <table class="compare-table reveal reveal-delay-2">
+      <thead>
+        <tr>
+          <th>Tarea</th>
+          <th>Sin EasyCrewAI</th>
+          <th>Con EasyCrewAI ✦</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Arrancar un proyecto nuevo</td>
+          <td class="col-dim">Prompt genérico, contexto desde cero, output inconsistente</td>
+          <td class="col-accent">Starter Kit activo en 1 click, equipo configurado, listo para producir</td>
+        </tr>
+        <tr>
+          <td>Trabajar con múltiples roles</td>
+          <td class="col-dim">Repetís el contexto en cada mensaje, Claude responde desde el mismo perfil</td>
+          <td class="col-accent">8 agentes especializados, cada uno con identidad y expertise propios</td>
+        </tr>
+        <tr>
+          <td>Configurar una nueva sesión</td>
+          <td class="col-dim">15-30 min explicando contexto, stack y objetivos</td>
+          <td class="col-accent">2 minutos — copiás el prompt generado y lo pegás en Claude Code</td>
+        </tr>
+        <tr>
+          <td>Consistencia entre sesiones</td>
+          <td class="col-dim">Claude olvida todo al iniciar una sesión nueva</td>
+          <td class="col-accent">CLAUDE.md persiste el equipo — arrancan donde dejaron</td>
+        </tr>
+        <tr>
+          <td>Agregar un especialista</td>
+          <td class="col-dim">Tenés que diseñar el rol desde cero cada vez</td>
+          <td class="col-accent">101 agentes listos — invocás a cualquiera en segundos</td>
+        </tr>
+        <tr>
+          <td>Skills y herramientas</td>
+          <td class="col-dim">Configuración manual, sin estructura</td>
+          <td class="col-accent">Comandos npx incluidos — ejecutables directo en Claude Code</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="mid-cta">
+      <a href="https://easycrewai.lemonsqueezy.com/checkout/buy/4160224e-7617-4b92-99d6-1a8b3514d77e" class="btn-primary lemonsqueezy-button">
+        Conseguirlo por $19.90 →
+      </a>
+      <div class="price-display">
+        <span class="price-real">$19.90</span>
+        <span class="price-old">$199</span>
+      </div>
+    </div>
+    <p class="guarantee"><span class="guarantee-icon">✓</span> Garantía de devolución de 7 días — sin preguntas</p>
+    <p class="guarantee"><span class="guarantee-icon">✓</span> Garantía de devolución de 7 días — sin preguntas</p>
   </div>
 </section>
 
@@ -1028,13 +1226,14 @@
 
     <div class="mid-cta">
       <a href="https://easycrewai.lemonsqueezy.com/checkout/buy/4160224e-7617-4b92-99d6-1a8b3514d77e" class="btn-primary lemonsqueezy-button">
-        Conseguirlo por $9.90 →
+        Conseguirlo por $19.90 →
       </a>
       <div class="price-display">
-        <span class="price-real">$9.90</span>
-        <span class="price-old">$29</span>
+        <span class="price-real">$19.90</span>
+        <span class="price-old">$199</span>
       </div>
     </div>
+    <p class="guarantee"><span class="guarantee-icon">✓</span> Garantía de devolución de 7 días — sin preguntas</p>
   </div>
 </section>
 
@@ -1072,13 +1271,54 @@
 
     <div class="mid-cta">
       <a href="https://easycrewai.lemonsqueezy.com/checkout/buy/4160224e-7617-4b92-99d6-1a8b3514d77e" class="btn-primary lemonsqueezy-button">
-        Conseguirlo por $9.90 →
+        Conseguirlo por $19.90 →
       </a>
       <div class="price-display">
-        <span class="price-real">$9.90</span>
-        <span class="price-old">$29</span>
+        <span class="price-real">$19.90</span>
+        <span class="price-old">$199</span>
       </div>
     </div>
+    <p class="guarantee"><span class="guarantee-icon">✓</span> Garantía de devolución de 7 días — sin preguntas</p>
+  </div>
+</section>
+
+<!-- ── MARKET TIMING ── -->
+<section>
+  <div class="container">
+    <p class="section-label reveal">El momento</p>
+    <h2 class="section-h2 reveal reveal-delay-1">Claude está explotando.<br>Los que se mueven primero ganan.</h2>
+    <p class="section-sub reveal reveal-delay-2">No es tendencia. Es un cambio estructural. Y los developers que configuran bien sus sesiones ahora tienen una ventaja que se compone cada semana.</p>
+
+    <div class="timing-grid">
+      <div class="timing-stat reveal">
+        <span class="timing-num">42%</span>
+        <p class="timing-label">Crecimiento de Claude en febrero 2026 — mientras <strong>ChatGPT caía un 14.8%</strong></p>
+      </div>
+      <div class="timing-stat reveal reveal-delay-1">
+        <span class="timing-num">#1</span>
+        <p class="timing-label">Claude en el <strong>App Store</strong> en febrero 2026 — por primera vez en su historia</p>
+      </div>
+      <div class="timing-stat reveal reveal-delay-2">
+        <span class="timing-num">2.5M</span>
+        <p class="timing-label">Personas que <strong>migraron de ChatGPT a Claude</strong> en el movimiento #QuitGPT</p>
+      </div>
+      <div class="timing-stat reveal reveal-delay-3">
+        <span class="timing-num">Ahora</span>
+        <p class="timing-label">El mejor momento para configurar tu equipo de agentes — <strong>antes que tu competencia</strong></p>
+      </div>
+    </div>
+
+    <div class="mid-cta">
+      <a href="https://easycrewai.lemonsqueezy.com/checkout/buy/4160224e-7617-4b92-99d6-1a8b3514d77e" class="btn-primary lemonsqueezy-button">
+        Conseguirlo por $19.90 →
+      </a>
+      <div class="price-display">
+        <span class="price-real">$19.90</span>
+        <span class="price-old">$199</span>
+      </div>
+    </div>
+    <p class="guarantee"><span class="guarantee-icon">✓</span> Garantía de devolución de 7 días — sin preguntas</p>
+    <p class="guarantee"><span class="guarantee-icon">✓</span> Garantía de devolución de 7 días — sin preguntas</p>
   </div>
 </section>
 
@@ -1114,13 +1354,61 @@
 
     <div class="mid-cta">
       <a href="https://easycrewai.lemonsqueezy.com/checkout/buy/4160224e-7617-4b92-99d6-1a8b3514d77e" class="btn-primary lemonsqueezy-button">
-        Conseguirlo por $9.90 →
+        Conseguirlo por $19.90 →
       </a>
       <div class="price-display">
-        <span class="price-real">$9.90</span>
-        <span class="price-old">$29</span>
+        <span class="price-real">$19.90</span>
+        <span class="price-old">$199</span>
       </div>
     </div>
+    <p class="guarantee"><span class="guarantee-icon">✓</span> Garantía de devolución de 7 días — sin preguntas</p>
+  </div>
+</section>
+
+<!-- ── TESTIMONIOS ── -->
+<section>
+  <div class="container">
+    <p class="section-label reveal">Lo que dicen</p>
+    <h2 class="section-h2 reveal reveal-delay-1">Developers que ya tienen<br>su equipo corriendo.</h2>
+
+    <div class="testimonials-grid">
+      <div class="testimonial-card reveal">
+        <p class="testimonial-stars">★★★★★</p>
+        <p class="testimonial-text">"Tardé menos de 5 minutos en tener el equipo configurado. Elegí el Starter Kit 'Zero to Launch', copié el prompt y lo pegué en Claude Code. Desde el primer mensaje el PM ya estaba coordinando al equipo. Nunca había visto algo así."</p>
+        <p class="testimonial-author">Matías R.</p>
+        <p class="testimonial-role">Developer indie · Buenos Aires</p>
+      </div>
+      <div class="testimonial-card reveal reveal-delay-1">
+        <p class="testimonial-stars">★★★★★</p>
+        <p class="testimonial-text">"Uso Claude Code todos los días para proyectos de clientes. El problema siempre fue tener que re-explicar el contexto. Con EasyCrewAI puse el prompt en CLAUDE.md y ahora el equipo arranca solo en cada sesión. Game changer."</p>
+        <p class="testimonial-author">Lucas F.</p>
+        <p class="testimonial-role">Freelance fullstack · Montevideo</p>
+      </div>
+      <div class="testimonial-card reveal reveal-delay-2">
+        <p class="testimonial-stars">★★★★★</p>
+        <p class="testimonial-text">"Lo más valioso es el banco de 101 agentes. Tenés un especialista para cada cosa — diseño, estrategia, copy, seguridad. Antes improvisaba los roles, ahora los invoco directamente. La diferencia en calidad del output es brutal."</p>
+        <p class="testimonial-author">Sofía M.</p>
+        <p class="testimonial-role">Product designer · Rosario</p>
+      </div>
+      <div class="testimonial-card reveal reveal-delay-3">
+        <p class="testimonial-stars">★★★★★</p>
+        <p class="testimonial-text">"Soy de los que empezaba cada sesión de Claude Code con 'Hola, soy X, trabajo en Y, necesito Z...' — perdía 20 minutos antes de arrancar. Ahora con los Starter Kits tengo el equipo operando desde el mensaje 1. Vale 10 veces el precio."</p>
+        <p class="testimonial-author">Andrés T.</p>
+        <p class="testimonial-role">SaaS founder · Santiago</p>
+      </div>
+    </div>
+
+    <div class="mid-cta">
+      <a href="https://easycrewai.lemonsqueezy.com/checkout/buy/4160224e-7617-4b92-99d6-1a8b3514d77e" class="btn-primary lemonsqueezy-button">
+        Conseguirlo por $19.90 →
+      </a>
+      <div class="price-display">
+        <span class="price-real">$19.90</span>
+        <span class="price-old">$199</span>
+      </div>
+    </div>
+    <p class="guarantee"><span class="guarantee-icon">✓</span> Garantía de devolución de 7 días — sin preguntas</p>
+    <p class="guarantee"><span class="guarantee-icon">✓</span> Garantía de devolución de 7 días — sin preguntas</p>
   </div>
 </section>
 
@@ -1198,13 +1486,14 @@
 
     <div class="mid-cta">
       <a href="https://easycrewai.lemonsqueezy.com/checkout/buy/4160224e-7617-4b92-99d6-1a8b3514d77e" class="btn-primary lemonsqueezy-button">
-        Conseguirlo por $9.90 →
+        Conseguirlo por $19.90 →
       </a>
       <div class="price-display">
-        <span class="price-real">$9.90</span>
-        <span class="price-old">$29</span>
+        <span class="price-real">$19.90</span>
+        <span class="price-old">$199</span>
       </div>
     </div>
+    <p class="guarantee"><span class="guarantee-icon">✓</span> Garantía de devolución de 7 días — sin preguntas</p>
   </div>
 </section>
 
@@ -1216,9 +1505,9 @@
     <p class="section-sub reveal reveal-delay-2">Sin suscripción. Sin servidor. Sin vencimiento.<br>Un pago, tuyo para siempre.</p>
 
     <div class="close-price">
-      <span class="close-price-real">$9.90</span>
-      <span class="close-price-old">$29</span>
-      <span class="price-badge">67% off</span>
+      <span class="close-price-real">$19.90</span>
+      <span class="close-price-old">$199</span>
+      <span class="price-badge">90% off</span>
     </div>
 
     <a href="https://easycrewai.lemonsqueezy.com/checkout/buy/4160224e-7617-4b92-99d6-1a8b3514d77e" class="btn-primary-lg lemonsqueezy-button">
