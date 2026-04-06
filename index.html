@@ -1047,7 +1047,7 @@
       <p class="popup-sub">El precio de lanzamiento de <strong style="color:var(--base)">$19.90</strong> ya no está disponible.<br>Podés conseguirlo al precio regular, o dejarnos tu mail y te mandamos un cupón de descuento.</p>
 
       <a href="https://easycrewai.lemonsqueezy.com/checkout/buy/3fd216e2-2ca8-4138-8a69-4875810747d7" class="btn-full-price lemonsqueezy-button">
-        Conseguirlo al precio regular — <span class="fp-price">$199</span>
+        Conseguirlo al precio regular — <span class="fp-price">$89</span>
       </a>
 
       <div class="popup-divider"><span>O conseguí tu cupón</span></div>
@@ -1110,7 +1110,7 @@
       </a>
       <div class="price-display">
         <span class="price-real">$19.90</span>
-        <span class="price-old">$199</span>
+        <span class="price-old">$89</span>
         <span class="price-badge">90% off</span>
       </div>
       <p class="guarantee"><span class="guarantee-icon">✓</span> Garantía de devolución de 7 días — sin preguntas</p>
@@ -1186,10 +1186,9 @@
       </a>
       <div class="price-display">
         <span class="price-real">$19.90</span>
-        <span class="price-old">$199</span>
+        <span class="price-old">$89</span>
       </div>
     </div>
-    <p class="guarantee"><span class="guarantee-icon">✓</span> Garantía de devolución de 7 días — sin preguntas</p>
     <p class="guarantee"><span class="guarantee-icon">✓</span> Garantía de devolución de 7 días — sin preguntas</p>
   </div>
 </section>
@@ -1230,7 +1229,7 @@
       </a>
       <div class="price-display">
         <span class="price-real">$19.90</span>
-        <span class="price-old">$199</span>
+        <span class="price-old">$89</span>
       </div>
     </div>
     <p class="guarantee"><span class="guarantee-icon">✓</span> Garantía de devolución de 7 días — sin preguntas</p>
@@ -1275,7 +1274,7 @@
       </a>
       <div class="price-display">
         <span class="price-real">$19.90</span>
-        <span class="price-old">$199</span>
+        <span class="price-old">$89</span>
       </div>
     </div>
     <p class="guarantee"><span class="guarantee-icon">✓</span> Garantía de devolución de 7 días — sin preguntas</p>
@@ -1314,10 +1313,9 @@
       </a>
       <div class="price-display">
         <span class="price-real">$19.90</span>
-        <span class="price-old">$199</span>
+        <span class="price-old">$89</span>
       </div>
     </div>
-    <p class="guarantee"><span class="guarantee-icon">✓</span> Garantía de devolución de 7 días — sin preguntas</p>
     <p class="guarantee"><span class="guarantee-icon">✓</span> Garantía de devolución de 7 días — sin preguntas</p>
   </div>
 </section>
@@ -1358,7 +1356,7 @@
       </a>
       <div class="price-display">
         <span class="price-real">$19.90</span>
-        <span class="price-old">$199</span>
+        <span class="price-old">$89</span>
       </div>
     </div>
     <p class="guarantee"><span class="guarantee-icon">✓</span> Garantía de devolución de 7 días — sin preguntas</p>
@@ -1404,10 +1402,9 @@
       </a>
       <div class="price-display">
         <span class="price-real">$19.90</span>
-        <span class="price-old">$199</span>
+        <span class="price-old">$89</span>
       </div>
     </div>
-    <p class="guarantee"><span class="guarantee-icon">✓</span> Garantía de devolución de 7 días — sin preguntas</p>
     <p class="guarantee"><span class="guarantee-icon">✓</span> Garantía de devolución de 7 días — sin preguntas</p>
   </div>
 </section>
@@ -1490,7 +1487,7 @@
       </a>
       <div class="price-display">
         <span class="price-real">$19.90</span>
-        <span class="price-old">$199</span>
+        <span class="price-old">$89</span>
       </div>
     </div>
     <p class="guarantee"><span class="guarantee-icon">✓</span> Garantía de devolución de 7 días — sin preguntas</p>
@@ -1506,7 +1503,7 @@
 
     <div class="close-price">
       <span class="close-price-real">$19.90</span>
-      <span class="close-price-old">$199</span>
+      <span class="close-price-old">$89</span>
       <span class="price-badge">90% off</span>
     </div>
 
@@ -1658,16 +1655,31 @@
 
   // ── VIDEO AUTOPLAY ON SCROLL ──
   const demoVideo = document.getElementById('demo-video');
+
+  function tryPlay() {
+    const p = demoVideo.play();
+    if (p !== undefined) p.catch(() => {});
+  }
+
   const videoObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        demoVideo.play();
+        tryPlay();
       } else {
         demoVideo.pause();
       }
     });
-  }, { threshold: 0.4 });
+  }, { threshold: 0.2 });
   videoObserver.observe(demoVideo);
+
+  // Fallback para mobile — play al primer toque en cualquier lugar
+  const mobilePlayHandler = () => {
+    tryPlay();
+    document.removeEventListener('touchstart', mobilePlayHandler);
+    document.removeEventListener('click', mobilePlayHandler);
+  };
+  document.addEventListener('touchstart', mobilePlayHandler, { once: true });
+  document.addEventListener('click', mobilePlayHandler, { once: true });
 
   // ── FAQ ACCORDION ──
   function toggleFaq(btn) {
